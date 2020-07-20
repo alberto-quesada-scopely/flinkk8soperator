@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flinkoperator
-  namespace: flink-operator
+  namespace: satellites
   labels:
     app: flinkoperator
 spec:
@@ -16,6 +16,8 @@ spec:
         app: flinkoperator
         app.kubernetes.io/version: 0.5.0
     spec:
+      imagePullSecrets:
+        - name: jfrog-docker
       serviceAccountName: flinkoperator
       volumes:
       - name: config-volume
@@ -26,7 +28,7 @@ spec:
             path: config.yaml
       containers:
       - name: flinkoperator-gojson
-        image: docker.io/lyft/flinkk8soperator:v0.5.0
+        image: scopelybin-docker.jfrog.io/flinkk8soperator:ae1fec6a7fb73c2e5f859278af8479a5df717147
         command:
         - flinkoperator
         args:
@@ -36,7 +38,7 @@ spec:
         env:
         - name: OPERATOR_NAME
           value: flinkk8soperator
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
           - containerPort: 10254
         resources:
